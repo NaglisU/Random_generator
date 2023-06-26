@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-lg-12" style="margin-top:20px;margin-left:20px">
+    <h1>Random Team Generator</h1>
+    <hr>
+    <p>Add names separated by "," for example: Name1,Name2,Name3...</p>
+        {% if messages %}
+        <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}">{% endif %}
+                {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+<form method="post" action="{% url 'team_generator' %}">
+    {% csrf_token %}
+    <label for="names">Names:</label>
+    <textarea name="names" rows="4" cols="50" id="names" required></textarea><br>
+
+    <label for="num_teams">Number of Teams:</label>
+    <input type="number" min="1" name="num_teams" id="num_teams" required><br>
+
+    <input type="submit" value="Generate Teams">
+</form>
+</div>
+{% endblock %}

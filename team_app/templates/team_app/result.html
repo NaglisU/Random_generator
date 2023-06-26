@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <h1>Team Generator Result</h1>
+
+    {% for team in teams %}
+        <h2>Team {{ forloop.counter }}</h2>
+        <ul>
+            {% for member in team %}
+                <li>{{ member }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+<form action="{% url 'team_generator' %}" method="GET">
+    <button type="submit">Generate again!</button>
+</form>
+<form action="{% url 'reroll' %}" method="GET">
+    <button type="submit">Reroll!</button>
+</form>
+</body>
+{% endblock %}
