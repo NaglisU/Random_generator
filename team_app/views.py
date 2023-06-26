@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .utils import helper_functions
 from django.contrib import messages
 import random
+import string
 
 # # Create your views here.
 def team_generator(request):
@@ -69,3 +70,21 @@ def cointoss(request):
     else:
         error_message = None
     return render(request, 'team_app/cointoss.html', {'error_message': error_message})
+
+def random_pass(request):
+    password = generate_random_password()
+    return render(request, 'team_app/random_pass.html', {'password':password})
+def generate_random_password():
+    length = random.randint(8,12) # Random length between 8 and 12
+    lowercase_letters = string.ascii_lowercase
+    uppercase_letters = string.ascii_uppercase
+    digits = string.digits
+    symbols = string.punctuation
+
+    # Ensure at least one character of each type
+    password = (random.choice(lowercase_letters)+random.choice(uppercase_letters)+random.choice(digits)+
+                random.choice(symbols))
+    # Fill the remaining length with random characters
+    password += ''.join(random.choice(lowercase_letters + uppercase_letters + digits + symbols)
+                        for _ in range(length - 4))
+    return password
