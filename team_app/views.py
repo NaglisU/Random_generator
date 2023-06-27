@@ -71,20 +71,24 @@ def cointoss(request):
         error_message = None
     return render(request, 'team_app/cointoss.html', {'error_message': error_message})
 
-def random_pass(request):
-    password = generate_random_password()
-    return render(request, 'team_app/random_pass.html', {'password':password})
-def generate_random_password():
-    length = random.randint(8,12) # Random length between 8 and 12
-    lowercase_letters = string.ascii_lowercase
-    uppercase_letters = string.ascii_uppercase
-    digits = string.digits
-    symbols = string.punctuation
 
-    # Ensure at least one character of each type
-    password = (random.choice(lowercase_letters)+random.choice(uppercase_letters)+random.choice(digits)+
-                random.choice(symbols))
-    # Fill the remaining length with random characters
-    password += ''.join(random.choice(lowercase_letters + uppercase_letters + digits + symbols)
-                        for _ in range(length - 4))
+def random_pass(request):
+    if request.method == 'POST':
+        password_length = int(request.POST.get('password_length'))
+
+        # Validate password length
+        if password_length < 8 or password_length > 12:
+            error_message = 'Please enter a password length between 8 and 12 characters.'
+            return render(request, 'team_app/random_pass.html', {'error_message': error_message})
+
+        password = generate_random_password(password_length)
+
+        return render(request, 'team_app/random_pass.html', {'password': password})
+
+    return render(request, 'team_app/random_pass.html')
+
+
+def generate_random_password(length):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(characters) for _ in range(length))
     return password
